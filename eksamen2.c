@@ -3,7 +3,7 @@
     Gruppe:     B217
     Retning:    SW - Software
 
-    Inspiration til if-else kæde er fået fra Kristian Sørensen - Havde gang i en switch, som ikke fungerede, og han forklarede if-else kæde, og hvordan man kunne lave den
+    Inspiration og hjælp til if-else kæde er fået fra Kristian Sørensen - Havde gang i en switch, som ikke fungerede, og han forklarede if-else kæde, og hvordan man kunne lave den
 */
 
 #include <stdio.h>
