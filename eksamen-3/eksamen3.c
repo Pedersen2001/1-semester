@@ -4,11 +4,10 @@
 
 #define MATCHES_PLAYED 132
 #define TEAMS_TOTAL 12
-#define POINTS_WIN 3
-#define POINTS_DRAW 1
 #define MAX_CHAR 100
 #define NAME 10
 
+/*A struct for all the values concerning each team*/
 typedef struct {
     char team_name[NAME];
     int points;
@@ -16,6 +15,7 @@ typedef struct {
     int goal_let_in;
 } Team;
 
+/*A struct for all values concerning each match*/
 typedef struct {
     char day_of_week[MAX_CHAR];
     int day_of_month;
@@ -29,6 +29,8 @@ typedef struct {
     int viewers; 
 } Match;
 
+
+/*Prototypes for each function*/
 void file_with_mathes(Match []);
 int team_names(char []);
 void making_teams(Match [], Team []);
@@ -36,8 +38,8 @@ void update_teams(Team [], Match []);
 int points_award(int, int);
 void team_score(Team);
 void team_scoreboard_print(Team []);
-//void team_scoreboard(Match [], Team []);
 int compare(const void *, const void *);
+
 
 int main(void){
     Match Matches[MATCHES_PLAYED];
@@ -56,6 +58,7 @@ int main(void){
     return 0;
 }
 
+/*Openning the file and scanning each line, to add value into structs*/
 void file_with_mathes(Match Matches[]){
     FILE *input_file_pointer;
     int i = 0;
@@ -78,6 +81,7 @@ void file_with_mathes(Match Matches[]){
     fclose(input_file_pointer);
 }
 
+/*Creating each team*/
 void making_teams(Match Matches[], Team Teams[]){
     int m, t1, t2;
 
@@ -102,7 +106,7 @@ void making_teams(Match Matches[], Team Teams[]){
     }
 }
 
-
+/*Identifying each team*/
 int team_names(char team[]){
 
     if (! strcmp(team, "SDR"))
@@ -133,6 +137,7 @@ int team_names(char team[]){
         return 12;
 }
 
+/*Updating each team with their points from each match*/
 void update_teams(Team Teams[], Match Matches[]){
     int i;
     int j;
@@ -155,6 +160,7 @@ void update_teams(Team Teams[], Match Matches[]){
     }
 }
 
+/*Awarding points to each team - if they win, draw or lose*/
 int points_award(int first_team, int second_team){
     if (first_team > second_team){
         return 3;
@@ -165,11 +171,12 @@ int points_award(int first_team, int second_team){
     }
 }
 
-
+/*Printing the name, gols scored and goals let in, and points for each team*/
 void team_score(Team Team){
     printf("  %3s    |  %d - %d |    %d\n", Team.team_name, Team.goals_scored, Team.goal_let_in, Team.points);
 }
 
+/*Printing the scoreboard*/
 void team_scoreboard_print(Team Teams[]){
     int i;
 
@@ -181,6 +188,7 @@ void team_scoreboard_print(Team Teams[]){
     printf("\n");
 }
 
+/*Comparing each team, where the team with the most points are highest on the scoreboard*/
 int compare(const void *ep1, const void *ep2){
     Team *pt1 = (Team *)ep1;
     Team *pt2 = (Team *)ep2;
