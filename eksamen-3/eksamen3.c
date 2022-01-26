@@ -1,7 +1,16 @@
+/*  Navn:       Lucas Lybek Højlund Pedersen
+    email:      llhp21@student.aau.dk
+    Gruppe:     B217
+    Retning:    SW 
+*/
+
+/*Preprocessor directive */
+/*Inkluderinger i form af Library header inclusions */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+/* Konstante definitioner */
 #define MATCHES_PLAYED 132
 #define TEAMS_TOTAL 12
 #define MAX_CHAR 100
@@ -30,7 +39,7 @@ typedef struct {
 } Match;
 
 
-/*Prototypes for each function*/
+/*Prototypes for each function - funktioner, som er erklærede*/
 void file_with_mathes(Match []);
 int team_names(char []);
 void making_teams(Match [], Team []);
@@ -42,8 +51,8 @@ int compare(const void *, const void *);
 
 
 int main(void){
-    Match Matches[MATCHES_PLAYED];
-    Team Teams[TEAMS_TOTAL];
+    Match Matches[MATCHES_PLAYED]; /*Her bliver der lavet en struct variabel ud af "Match" - denne bliver sendt videre til de andre funktioner*/
+    Team Teams[TEAMS_TOTAL]; /*Her bliver der lavet en struct variabel ud af "Team" - denne bliver sendt videre til de andre funktioner*/
 
     file_with_mathes(Matches);
 
@@ -51,7 +60,12 @@ int main(void){
 
     update_teams(Teams, Matches);
 
-    qsort(Teams, TEAMS_TOTAL, sizeof(Team), compare);
+    qsort(Teams, TEAMS_TOTAL, sizeof(Team), compare); 
+    /*qsort er en funktion fra stdlib library. Den tager 4 parametre: 
+    1. Pointer til det der skal sorteres
+    2. Antal af elementer i det der skal sorteres
+    3. Størrelsen i bites for elementet der skal sorteres
+    4. Funktionen, som skal sammenligne elementerne */
 
     team_scoreboard_print(Teams);
 
@@ -60,17 +74,17 @@ int main(void){
 
 /*Openning the file and scanning each line, to add value into structs*/
 void file_with_mathes(Match Matches[]){
-    FILE *input_file_pointer;
-    int i = 0;
+    FILE *input_file_pointer; /*En struct FILE fra stdio.h, som samler alle filens egenskaber, hvoraf en pointer dertil er den måde, hvorpå vi arbejder med filen*/
+    int i = 0; /*Lokal variabel, som bliver initialiseret*/
 
-    input_file_pointer = fopen("kampe-2020-2021.txt", "r");
+    input_file_pointer = fopen("kampe-2020-2021.txt", "r");/*fopen tager to parametre: filnavn og hvad man vil gøre med filen, hvoraf "r" fortæller, at man åbner og læser i en fil*/
 
     if (input_file_pointer == NULL){
         printf("It is not possible to open the input file");
         exit(EXIT_FAILURE);
-    } else {
-        while (i < MATCHES_PLAYED){
-            fscanf(input_file_pointer, " %s %d/%d %d.%d %s - %s %d - %d %d ", 
+    }else{
+        while (i < MATCHES_PLAYED){ /*%s er for en string, hvor %d er for (decimal) integer*/
+            fscanf(input_file_pointer, " %s %d/%d %d.%d %s - %s %d - %d %d ", /*Tager 2 parametre: 1. Pointer til en fil. 2. En string  -  fscanf læser formateret input fra en pointer*/
             Matches[i].day_of_week, &Matches[i].day_of_month, &Matches[i].month, 
             &Matches[i].hour, &Matches[i].minute, Matches[i].first_team,
             Matches[i].second_team, &Matches[i].first_team_score,
@@ -78,84 +92,103 @@ void file_with_mathes(Match Matches[]){
             i++;
         }
     }
-    fclose(input_file_pointer);
+    fclose(input_file_pointer); /*Lukker filen, og bryder alt forbindelsen til filen*/
 }
 
 /*Creating each team*/
-void making_teams(Match Matches[], Team Teams[]){
-    int m, t1, t2;
+void making_teams(Match Matches[], Team Teams[]){ /*Jeg sender min struct by value, hvilket vil sige, at funktionen modtager en kopi af structen, som den kan arbejde med*/
+    int m, t1 /*t2*/;
 
     for (m = 0; m < MATCHES_PLAYED; m++){
         t1 = team_names(Matches[m].first_team);
-        t2 = team_names(Matches[m].second_team);
+        /* t2 = team_names(Matches[m].second_team); */
 
         /* create new teams */
-        if (*(Teams[t1].team_name) == 0){
-            sprintf(Teams[t1].team_name, Matches[m].first_team);
+        if (*(Teams[t1].team_name) == 0){ /*Hvis pladsen, som pointeren peger på er 0, så tildeles de følgende værdier.*/
+            /* sprintf sender data videre til en string, som er pointet på, at den første parameter, hvorefter den anden parameter er det, som man indskriver i stringen */
+            sprintf(Teams[t1].team_name, Matches[m].first_team); 
             Teams[t1].goals_scored = 0;
             Teams[t1].goal_let_in = 0;
             Teams[t1].points = 0;
         }
-            
+        /*    
         if (*(Teams[t2].team_name) == 0){
             sprintf(Teams[t2].team_name, Matches[m].second_team);
             Teams[t2].goals_scored = 0;
             Teams[t2].goal_let_in = 0;
             Teams[t2].points = 0;
         }
+        */
     }
 }
-
+/*
+strcmp tager to strings og sammenligner dem. Hvis string 1 er større end string 2 retunerer funktionen 1. Hvis string 2 er større end string 1 retunerer funktionen -1.
+Er de lige store (identiske) retunerer funktionen 0, hvilket er false i boolean (0), så man negerer med ! for at mit statement bliver true.
+*/
 /*Identifying each team*/
 int team_names(char team[]){
-
-    if (! strcmp(team, "SDR"))
+    if (! strcmp(team, "SDR")){
         return 0; 
-    else if (! strcmp(team, "FCM")) 
+
+    }else if (! strcmp(team, "FCM")){
         return 1;
-    else if (! strcmp(team, "ACH")) 
+
+    }else if (! strcmp(team, "ACH")){
         return 2;
-    else if (! strcmp(team, "RFC")) 
+
+    }else if (! strcmp(team, "RFC")){ 
         return 3;
-    else if (! strcmp(team, "LBK")) 
+
+    }else if (! strcmp(team, "LBK")){
         return 4;
-    else if (! strcmp(team, "AaB")) 
+        
+    }else if (! strcmp(team, "AaB")){
         return 5;
-    else if (! strcmp(team, "BIF")) 
+
+    }else if (! strcmp(team, "BIF")){
         return 6;
-    else if (! strcmp(team, "FCN")) 
+
+    }else if (! strcmp(team, "FCN")){
         return 7;
-    else if (! strcmp(team, "OB")) 
+
+    }else if (! strcmp(team, "OB")){
         return 8;
-    else if (! strcmp(team, "FCK")) 
+
+    }else if (! strcmp(team, "FCK")){
         return 9;
-    else if (! strcmp(team, "AGF")) 
+
+    }else if (! strcmp(team, "AGF")){
         return 10;
-    else if (! strcmp(team, "VB")) 
+
+    }else if (! strcmp(team, "VB")){
         return 11;
-    else
+
+    }else{
         return 12;
+    }
 }
 
 /*Updating each team with their points from each match*/
 void update_teams(Team Teams[], Match Matches[]){
     int i;
     int j;
+    int ret;
     int played = MATCHES_PLAYED;
     int total = TEAMS_TOTAL;
 
     for (i = 0; i < played; i++){
         for (j = 0; j < total; j++){
             if (!strcmp(Teams[j].team_name, Matches[i].first_team)){
-                Teams[j].goals_scored += Matches[i].first_team_score;
-                Teams[j].goal_let_in += Matches[i].second_team_score;
-                Teams[j].points += points_award(Matches[i].first_team_score, Matches[i].second_team_score);  
+                Teams[j].goals_scored = Teams[j].goals_scored + Matches[i].first_team_score;
+                Teams[j].goal_let_in = Teams[j].goal_let_in + Matches[i].second_team_score;
+                Teams[j].points = Teams[j].points + points_award(Matches[i].first_team_score, Matches[i].second_team_score);  
             }
+
             if (!strcmp(Teams[j].team_name, Matches[i].second_team)){
-                Teams[j].goals_scored += Matches[i].second_team_score;
-                Teams[j].goal_let_in += Matches[i].first_team_score;
-                Teams[j].points += points_award(Matches[i].second_team_score, Matches[i].first_team_score);
-            } 
+                Teams[j].goals_scored = Teams[j].goals_scored + Matches[i].second_team_score;
+                Teams[j].goal_let_in = Teams[j].goal_let_in + Matches[i].first_team_score;
+                Teams[j].points = Teams[j].points + points_award(Matches[i].second_team_score, Matches[i].first_team_score);
+            }         
         }
     }
 }
@@ -164,9 +197,11 @@ void update_teams(Team Teams[], Match Matches[]){
 int points_award(int first_team, int second_team){
     if (first_team > second_team){
         return 3;
-    } else if (first_team < second_team){
+
+    }else if (first_team < second_team){
         return 0;
-    } else {
+
+    }else{
         return 1;
     }
 }
@@ -190,12 +225,13 @@ void team_scoreboard_print(Team Teams[]){
 
 /*Comparing each team, where the team with the most points are highest on the scoreboard*/
 int compare(const void *ep1, const void *ep2){
-    Team *pt1 = (Team *)ep1;
+    Team *pt1 = (Team *)ep1; /*Typecaster de generiske pointer til en anden type pointer, som er struct pointer*/
     Team *pt2 = (Team *)ep2;
 
     if (pt1->points != pt2->points){
-        return pt2->points - pt1->points;
+        return pt2->points - pt1->points; /*Hvis værdien er større end 0 (x>0), så kommer pt2 før pt1. Hvis værdien er mindre end 0 (<0), så kommer pt1 før pt2*/
+
     }else{
-        return pt2->goal_let_in - pt1->goal_let_in;
+        return pt2->goal_let_in - pt1->goal_let_in; /*Hvis værdien er større end 0 (x>0), så kommer pt2 før pt1. Hvis værdien er mindre end 0 (<0), så kommer pt1 før pt2*/
     }
 }

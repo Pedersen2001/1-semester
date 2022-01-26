@@ -6,6 +6,8 @@
     Inspiration og hjælp til if-else kæde er fået fra Kristian Sørensen - Havde gang i en switch, som ikke fungerede, og han forklarede if-else kæde, og hvordan man kunne lave den
 */
 
+/*Preprocessor directive */
+/*Inkluderinger i form af Library header inclusions */
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -26,7 +28,7 @@ void spil_yatzy(void);
 
 
 int main (void) {
-    srand(time(NULL));
+    srand(time(NULL)); /*Seeder min rand funktion*/
     spil_yatzy();
     return EXIT_SUCCESS;
 }
@@ -53,32 +55,35 @@ void spil_yatzy(){
 int terninge_slag(int terninger, int *resultat_terning){
     int i;
     for (i = 0; i < terninger; i++){
-        resultat_terning[i] = (rand() % 6) + 1;
+        resultat_terning[i] = (rand() % 6) + 1; //Laver et tal fra 1-6
     }
     return EXIT_SUCCESS;
 }
 
 
 /* Allokerer lager til det tilfældige slag med terninger */
-int *start_kast(int terninger){
+int *start_kast(int terninger){ /*Erklærer en funktion til at retunere en pointer af typen int*/
     int *resultat_terning;
-
+    
     resultat_terning = (int*)malloc(terninger * sizeof(int));
+    /*Creates a dynamic array of size "terninger" in this case
+    Vi kalder malloc, som allokerer plads på størrelsen af det array som vi skal bruge
+    Malloc retunerer en generisk pointer (void pointer), som bliver typekastet til en int pointer, og lagt over i "resultat_terning" */
 
     if (resultat_terning == NULL){
         printf("Det er ikke muligt at allokere nok lager");
         exit(EXIT_FAILURE);
     }
-    return resultat_terning;
+    return resultat_terning; /*resultat_terning fortæller noget om, hvilke øjne terningen viser*/
 }
 
 
 /* En funktion, som er med til at finde specifikke terninger i et tilfældigt kast, såsom 1, 2, 3... */
-int terningen(int terninger, int *resultat_terning, int spillet){
+int terningen(int terninger, int *resultat_terning, int spillet){ /*"spillet" repræsenterer det, som man leder efter i spillet - f.eks. om man leder efter antal 1'ere*/
     int i = 0, sum = 0, optal = 0;
 
     while (i < terninger){
-        if(resultat_terning[i] == spillet){
+        if(resultat_terning[i] == spillet){ /*Skal ikke dereferences, da det er et array, og i et array pointer man altid til det første element i et array*/
             if (optal < 5){
                 optal++;
                 sum = sum + resultat_terning[i];
@@ -97,14 +102,14 @@ int ens_terninger(int terninger, int *resultat_terning, int spillet, int udgangs
 
     for (j = udgangspunkt; j > 0; j--){
         for (i = 0; i < terninger; i++){
-            if (resultat_terning[i] == j){
+            if (resultat_terning[i] == j){ /*Skal ikke dereferences, da det er et array, og i et array pointer man altid til det første element i et array*/
                 optal++;
             }
-            if (optal == spillet){
+            if (optal == spillet){ 
                 return j * spillet;
             }
         }
-        optal = 0;
+        optal = 0; /* Dette er irrelevant */
     }
     return 0;
 }
@@ -112,13 +117,13 @@ int ens_terninger(int terninger, int *resultat_terning, int spillet, int udgangs
 
 /* Finder ud af, om der er par i et tilfældigt kast, 
    ved at finde det største par, og derefter det næste højeste osv. */
-int par_terninger(int terninger, int *resultat_terning){
+int par_terninger(int terninger, int *resultat_terning){ 
     int udgangspunkt = 6;
     int par1 = 0, par2 = 0;
 
-    par1 = ens_terninger(terninger, resultat_terning, 2, udgangspunkt);
+    par1 = ens_terninger(terninger, resultat_terning, 2, udgangspunkt); /*Skal ikke dereferences, da det er et array, og i et array pointer man altid til det første element i et array*/
     udgangspunkt = (par1 / 2) - 1;
-    par2 = ens_terninger(terninger, resultat_terning, 2, udgangspunkt);
+    par2 = ens_terninger(terninger, resultat_terning, 2, udgangspunkt); /*Skal ikke dereferences, da det er et array, og i et array pointer man altid til det første element i et array*/
 
     if (par1 > 0 && par2 > 0){
         return par1 + par2;
@@ -136,7 +141,7 @@ int straight(int terninger, int *resultat_terning, int spillet){
 
     while (hop < terninger){
         for (i = 0; i < terninger; i++){
-            if (resultat_terning[i] == spillet){
+            if (resultat_terning[i] == spillet){ /*Skal ikke dereferences, da det er et array, og i et array pointer man altid til det første element i et array*/
                 sum = sum + resultat_terning[i];
                 optal++;
                 spillet--;
@@ -195,9 +200,9 @@ int chancen(int antal_terninger[]){
 void yatzy_spillet(int terninger, int resultat[]){
     int i, j;
     int sum = 0, udgangspunkt = 6;
-    int *tilfaeldigt_kast;
+    int *tilfaeldigt_kast; /*Pointer til typen int*/
     
-    tilfaeldigt_kast = start_kast(terninger);
+    tilfaeldigt_kast = start_kast(terninger); /*Tildeler den værdien fra funktionspointeren*/
 
     for (i = 0; i < 18; i++){
         if (i < 6){

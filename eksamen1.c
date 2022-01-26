@@ -4,6 +4,8 @@
     Retning:    SW 
 */
 
+/*Preprocessor directive */
+/*Inkluderinger i form af Library header inclusions */
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -81,7 +83,10 @@ double do_next_op2(char operator, double operand, double akkumulator) {
     return udregning2;
 }
 
-/* En funktion, som finder ud af, om input er en binær operator - en form for input validering, da man finder ud af, om input kan bruges i den switch med binære operatorer */
+/* 
+En funktion, som finder ud af, om input er en binær (tager to operander f.eks. x+y) operator
+En form for input validering, da man finder ud af, om input kan bruges i den switch med binære operatorer
+*/
 int binaer(char operator) {
     if (operator == '^' || operator == '/' || 
         operator == '*' || operator == '+' ||
@@ -94,7 +99,10 @@ int binaer(char operator) {
     
 }
 
-/* En funktion, som finder ud af, om input er en unær operator en form for input validering, da man finder ud af, om input kan bruges i den switch med unære operatorer */
+/* 
+En funktion, som finder ud af, om input er en unær (tager én operand f.eks. #sqrt) operator
+En form for input validering, da man finder ud af, om input kan bruges i den switch med unære operatorer 
+*/
 int unaer(char operator) {
     if (operator == '#' || operator == '%' || operator == '!')
     {
@@ -105,7 +113,7 @@ int unaer(char operator) {
 }
 
 /* Tager input fra bruger, og finder ud af, om man skal lave udregning med unær eller binær operator */
-void scan_data(int *done, double *akkumulator) {
+void scan_data(int *done, double *akkumulator) { /*Vi sender en pointer med, og når værdien i funktionen ændrer sig, så ændres den også, når funktionen kaldes*/
     double operand = 0.0;
     char operator;
 
@@ -133,7 +141,7 @@ void run_calculator(void) {
     double akkumulator = 0.0;
 
     while (done != 1) {
-        scan_data(&done, &akkumulator);
+        scan_data(&done, &akkumulator); /*Call by reference, da man sender adressen af variablerne med, som faktiske parametre, som kan ændres. */
     }
     printf("Dit slutresultat er: %lf", akkumulator);
 }
