@@ -10,7 +10,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-/* Der laves prototyper af de forskellige funktioner i programmet */
+/*Prototypes for each function - funktioner, som er erklærede*/
 double do_next_op1(char , double , double);
 double do_next_op2(char , double , double);
 int binaer(char );
@@ -23,19 +23,20 @@ int main(void) {
     printf("Dine mulige binaere operatorer er: + (plus), - (minus), * (gange), / (divider), ^ (potensoploeftning) \n");
     printf("De mulige unaere operatorer er: # (kvadratrod), %% (Skifter fortegn), ! (Dividerer akkumulatoren med 1) \n");
     printf("For at afslutte, indtast q \n\n");
-    run_calculator();
+    run_calculator(); /*Dette funktionskald er en kommando*/
 
     return EXIT_SUCCESS;
 }
 
 /* Denne switch finder den givne operation, udregner resultat, og fortsætter hvis nødvendigt. Dette er gældende for de binære tal */
 double do_next_op1(char operator, double operand, double akkumulator) {
-    double udregning1 = akkumulator;
-    switch (operator)
+    double udregning1 = akkumulator; /*Lokal variabel, som bliver initialiseret - tilskrevet en startværdi - er også ekspressionstatement*/
+    /*En switch tager talværdien af ens input i form af operatoren. Dette er talværdien, som man får fra ASCII-tabellen. Switchen læser derfor tal, og ikke f.eks. +*/
+    switch (operator) /*Selektiv konstrolstruktur i form af en multivejsudvælgelse på basis af en heltallig variabel, hvor der udvælges netop én af de cases som en switch består af*/
     {
     case '-':
         udregning1 = udregning1 - operand;
-    break;
+    break; /*Er en hopkommando - de statements der er i en case vil fortsætte, indtil der mødes en break. */
 
     case '+':
         udregning1 = udregning1 + operand;
@@ -56,19 +57,20 @@ double do_next_op1(char operator, double operand, double akkumulator) {
         udregning1 = pow(udregning1, operand);
     break;
 
-    default:;
+    default:; /*Hvis ingen af de ovennævnte cases rammes, så vil en default udføre en opgave - default udfører dog ikke noget i dette tilfælde*/
     }
     return udregning1;
 }
 
 /* Denne switch finder den givne operation, udregner resultat, og fortsætter hvis nødvendigt. Dette er gældende for de unære tal */
 double do_next_op2(char operator, double operand, double akkumulator) {
-    double udregning2 = akkumulator;
-    switch (operator)
+    double udregning2 = akkumulator; /*Lokal variabel, som bliver initialiseret - tilskrevet en startværdi*/
+    /*En switch tager talværdien af ens input i form af operatoren. Dette er talværdien, som man får fra ASCII-tabellen. Switchen læser derfor tal, og ikke f.eks. #*/
+    switch (operator) /*Selektiv konstrolstruktur i form af en multivejsudvælgelse på basis af en heltallig variabel, hvor der udvælges netop én af de cases som en switch består af*/
     {
     case '#':
         udregning2 = sqrt(udregning2);
-    break;
+    break; /*Er en hopkommando - de statements der er i en case vil fortsætte, indtil der mødes en break. */
 
     case '%':
         udregning2 = udregning2 * -1;
@@ -78,7 +80,7 @@ double do_next_op2(char operator, double operand, double akkumulator) {
         udregning2 = 1 / udregning2;
     break;
 
-    default:;
+    default:; /*Hvis ingen af de ovennævnte cases rammes, så vil en default udføre en opgave - default udfører dog ikke noget i dette tilfælde*/
     }
     return udregning2;
 }
@@ -117,10 +119,14 @@ void scan_data(int *done, double *akkumulator) { /*Vi sender en pointer med, og 
     double operand = 0.0;
     char operator;
 
-    printf("Indskriv operator, og en valgfri operand: ");
-    scanf(" %c", &operator);
+    /*printf (output) er styret af en formateringsstreng, som gør brug af placeholders %, som modsvarer parameterne, som hedder en prinlist*/
+    printf("Indskriv operator, og en valgfri operand: "); 
+
+    /*scanf (input) bliver styret af en kontrolstreng, som gør brug af placeholders %, som angiver hvordan vi skal konvetere det input vi læser*/
+    scanf(" %c", &operator); /*Placeholder & bliver brugt, for at ændre værdien af "operator"*/
 
     if (binaer(operator)) {
+        /*scanf (input) bliver styret af en kontrolstreng, som gør brug af placeholders %, som angiver hvordan vi skal konvetere det input vi læser*/
         scanf(" %lf", &operand);
         *akkumulator = do_next_op1(operator, operand, *akkumulator);
 
@@ -143,5 +149,6 @@ void run_calculator(void) {
     while (done != 1) {
         scan_data(&done, &akkumulator); /*Call by reference, da man sender adressen af variablerne med, som faktiske parametre, som kan ændres. */
     }
-    printf("Dit slutresultat er: %lf", akkumulator);
+    printf("Dit slutresultat er: %lf", akkumulator); 
+    /*printf (output) er styret af en formateringsstreng, som gør brug af placeholders %, som modsvarer parameterne, som hedder en prinlist*/
 }
