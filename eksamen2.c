@@ -170,11 +170,11 @@ int fuldt_hus(int terninger, int *resultat_terning){
     par = ens_terninger(terninger, resultat_terning, 2, udgangspunkt);
 
     if (tre_ens > 0){
-        while ((par / 2) == (tre_ens / 3)){
+        while ((par / 2) == (tre_ens / 3)){ /*De tre ens og par må ikke være ens - hvis de er det, så finder man et par af en mindre talværdi*/
             par = ens_terninger(terninger, resultat_terning, 2, --udgangspunkt); /*Prefix decrement*/
         }
         
-    } if (tre_ens > 0 && par > 0){
+    } if (tre_ens > 0 && par > 0){ /*&& er en short circuited operator - det er unødvendigt at udregne den højre operand af udtrykket, hvis den venstre operand melder false*/
         return tre_ens + par;
 
     } else {
